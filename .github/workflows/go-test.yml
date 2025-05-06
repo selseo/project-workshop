@@ -1,0 +1,34 @@
+name: Go Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+    name: Run unit tests
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v4
+        with:
+          go-version: '1.23.1' # ใช้เวอร์ชันเดียวกับที่ระบุในไฟล์ go.mod
+          cache: true
+
+      - name: Install dependencies
+        run: go mod download
+
+      - name: Run tests
+        run: go test -v ./...
+
+      - name: Test Coverage
+        run: go test -coverprofile=coverage.out ./...
+
+      - name: Display coverage
+        run: go tool cover -func=coverage.out
