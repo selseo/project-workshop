@@ -1,6 +1,6 @@
 ## Project Workshop
 
-จะกำหนดโจทย์ให้ทุกคนมาร่วมเพิ่ม feature ไปพร้อมกัน
+This project aims to allow all participants to develop and implement features as specified in the Requirement.md document, which serves as the main project specification.
 
 ## Setup project
 
