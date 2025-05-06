@@ -6,6 +6,7 @@
 
 ### Requirements
 - Go version 1.18 or higher
+- Docker and Docker Compose (for PostgreSQL database)
 
 ### Installation
 
@@ -18,6 +19,39 @@ cd project-workshop
 2. Install dependencies
 ```bash
 go mod download
+```
+
+### Database Setup
+
+The project uses PostgreSQL as its database. You can start the database using Docker Compose:
+
+```bash
+docker-compose up -d
+```
+
+This will start a PostgreSQL instance with the following configuration:
+- Host: localhost
+- Port: 5432
+- Username: postgres
+- Password: postgres
+- Database: workshop
+
+You can verify the database connection by accessing the endpoint:
+
+```bash
+curl http://localhost:3000/db-status
+```
+
+To stop the database:
+
+```bash
+docker-compose down
+```
+
+To stop the database and remove all data:
+
+```bash
+docker-compose down -v
 ```
 
 ### Running the application
