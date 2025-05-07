@@ -64,6 +64,54 @@ func setupApp() *fiber.App {
 		return c.SendString("Database connected successfully")
 	})
 
+	// GET /customers/me/accounts - List all accounts for the authenticated customer
+	app.Get("/customers/me/accounts", func(c *fiber.Ctx) error {
+		// TODO: Implement proper authentication check to verify customer token
+
+		// Mock customer ID (in real implementation, get this from the token)
+		customerID := 1 // Example customer ID
+
+		// Query to get all accounts for the customer
+		rows, err := db.Query("SELECT account_number, account_type, status FROM accounts WHERE customer_id = $1", customerID)
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Failed to retrieve accounts",
+			})
+		}
+		defer rows.Close()
+
+		// Prepare response structure
+		type Account struct {
+			AccountNumber string `json:"account_number"`
+			AccountType   string `json:"account_type"`
+			Status        string `json:"status"`
+		}
+
+		accounts := []Account{}
+
+		// Iterate through results
+		for rows.Next() {
+			var acc Account
+			if err := rows.Scan(&acc.AccountNumber, &acc.AccountType, &acc.Status); err != nil {
+				return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+					"error": "Error scanning account data",
+				})
+			}
+			accounts = append(accounts, acc)
+		}
+
+		// Check for errors from iterating over rows
+		if err := rows.Err(); err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+				"error": "Error retrieving account data",
+			})
+		}
+
+		return c.JSON(fiber.Map{
+			"accounts": accounts,
+		})
+	})
+
 	return app
 }
 
