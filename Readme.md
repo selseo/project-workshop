@@ -81,3 +81,4 @@ go test ./cmd -v
 
 The test verifies that the GET / endpoint returns "Hello World" with status code 200.
 
+TEST
